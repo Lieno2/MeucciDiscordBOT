@@ -7,8 +7,8 @@ if (process.env.NODE_ENV === 'production') {
 	fastify = require('fastify')({
 		https: {
 			allowHTTP1: true,
-			key: fs.readFileSync('/etc/letsencrypt/live/discord.meucci.party/privkey.pem'),
-			cert: fs.readFileSync('/etc/letsencrypt/live/discord.meucci.party/cert.pem')
+			key: fs.readFileSync('/etc/letsencrypt/live/meucci.tcdev.xyz/privkey.pem'),
+			cert: fs.readFileSync('/etc/letsencrypt/live/meucci.tcdev.xyz/cert.pem')
 		}
 	})
 } else {
@@ -31,6 +31,7 @@ module.exports = class VerificationServer {
 		this.db = sqlite(`${__dirname}/../storage/db.sqlite`)
 
 		fastify.post('/api/login/google', async (req, res) => {
+
 			const credential = jwt.decode(req.body.credential)
 			if (credential.email.split('@')[1] != 'itismeucci.com') {
 				res.code(403).send()
@@ -58,9 +59,8 @@ module.exports = class VerificationServer {
 					process.env.jwtSecret
 				)
 				res.send({ token })
-			}
-
-			res.send()
+			} else
+				res.send()
 		})
 
 		fastify.post('/api/login/discord', async (req, res) => {
@@ -75,6 +75,10 @@ module.exports = class VerificationServer {
 					.join(' ')
 				const schoolClass = googleToken.class
 
+				console.log('Nuovo utente verificato: ')
+				console.log('Name: ', name)
+				console.log('Class: ', schoolClass)
+
 				const oauthData = await (
 					await fetch('https://discord.com/api/oauth2/token', {
 						method: 'POST',
@@ -83,7 +87,7 @@ module.exports = class VerificationServer {
 							client_secret: process.env.discordAuthSecret,
 							code: discordCode,
 							grant_type: 'authorization_code',
-							redirect_uri: 'https://discord.meucci.party',
+							redirect_uri: 'https://meucci.tcdev.xyz',
 							scope: 'identify guilds.join'
 						}).toString(),
 						headers: {
@@ -113,10 +117,9 @@ module.exports = class VerificationServer {
 
 				if (checkDuplicate) return
 
-				const member = await guild.members.fetch(user.id)
-				const classRole = await guild.roles.cache.find((r) => r.name == schoolClass)
-				const verifiedRole = await guild.roles.cache.find((r) => r.id == '1043205166431752223')
-
+				
+				
+				
 				await fetch(`https://discord.com/api/v8/guilds/1042453384009101483/members/${user.id}`, {
 					method: 'PUT',
 					headers: {
@@ -125,15 +128,22 @@ module.exports = class VerificationServer {
 					},
 					body: JSON.stringify({ access_token: oauthData.access_token })
 				})
+				
+				
+				const member = await guild.members.fetch(user.id)
+				const classRole = await guild.roles.cache.find((r) => r.name == schoolClass)
+				const verifiedRole = await guild.roles.cache.find((r) => r.id == '1043205166431752223')
+
 
 				await member.roles.add(classRole)
 				await member.roles.add(verifiedRole)
 				await member.setNickname(`${name} (${schoolClass})`)
+
 			} catch (error) {
 				console.error(error)
 				res.code(403).send(error)
 			}
-			res.code(200)
+			res.code(200).send({ success: true })
 		})
 
 		fastify.register(require('@fastify/static'), {
