@@ -7,8 +7,8 @@ window.onload = async () => {
 		if (!code) {
 			return
 		}
-
-		const result = await fetch('https://discord.meucci.party/api/login/discord', {
+		
+		const result = await fetch('https://meucci.tcdev.xyz/api/login/discord', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json'
@@ -35,7 +35,7 @@ window.onload = async () => {
 }
 
 async function sendCredentials(data) {
-	const req = await fetch('https://discord.meucci.party/api/login/google', {
+	const req = await fetch('https://meucci.tcdev.xyz/api/login/google', {
 		method: 'POST',
 		headers: {
 			'Content-Type': 'application/json'
