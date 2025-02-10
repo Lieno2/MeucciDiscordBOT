@@ -70,6 +70,8 @@ If you want to contribute to the project:
 4. Push your changes (`git push origin feature-new`)
 5. Open a Pull Request
 
+Go [here](https://github.com/Lieno2/MeucciDiscordBOT/blob/main/CONTRIBUTING.md) for more info!
+
 ## License
 
 This project is distributed under the GNU General Public License (GPL). See the `LICENSE` file for more details.
