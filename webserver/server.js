@@ -7,8 +7,8 @@ if (process.env.NODE_ENV === 'production') {
 	fastify = require('fastify')({
 		https: {
 			allowHTTP1: true,
-			key: fs.readFileSync('/etc/letsencrypt/live/meucci.tcdev.xyz/privkey.pem'),
-			cert: fs.readFileSync('/etc/letsencrypt/live/meucci.tcdev.xyz/cert.pem')
+			key: fs.readFileSync('/etc/letsencrypt/live/discord.meucci.party/privkey.pem'),
+			cert: fs.readFileSync('/etc/letsencrypt/live/discord.meucci.party/cert.pem')
 		}
 	})
 } else {
@@ -87,7 +87,7 @@ module.exports = class VerificationServer {
 							client_secret: process.env.discordAuthSecret,
 							code: discordCode,
 							grant_type: 'authorization_code',
-							redirect_uri: 'https://meucci.tcdev.xyz',
+							redirect_uri: 'https://discord.meucci.party',
 							scope: 'identify guilds.join'
 						}).toString(),
 						headers: {
