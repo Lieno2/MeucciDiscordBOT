@@ -21,8 +21,11 @@ client.on('messageCreate',async (message) => {
 	if (channel.id === countingChannelID) {
 		if (member.user.bot) return
 
-		if (Number(content) !== count) {
+		if (Number(content) !== count)
 			await message.delete()
-		} else count++
+		else {
+			count++
+			message.react('✅')
+		}
 	}
 })
