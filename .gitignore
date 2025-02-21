@@ -111,3 +111,4 @@ browser-data
 
 # thumbnails for the starboard
 thumbnails/*
+package-lock.json

@@ -1,0 +1,23 @@
+# ------------------------------------
+# WELCOME CONFIG
+# ------------------------------------
+
+welcome:
+  channelID: "1044011880924074037"
+  message: "Benvenuto nel server ${user-tag}" # Supported placeholder: ${user-tag}
+
+# ------------------------------------
+# COUNTING CONFIG
+# ------------------------------------
+
+counting:
+  channelID: "1053039207855177739"
+  enableReaction: true # If the bot react to the correct message
+
+# ------------------------------------
+# DB-POPULATOR CONFIG 
+# ------------------------------------
+
+dbp:
+  scheduleLink: "https://orario.itismeucci.edu.it/2022-2023/22-12-07%20-%20Orario%20definitivo/index.html"
+  scraperDelay: 0

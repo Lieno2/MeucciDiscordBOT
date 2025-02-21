@@ -1,9 +1,18 @@
 const { client } = require('../index.js')
+const fs = require('fs')
+const yaml = require('js-yaml');
 
-let countingChannelID = '1053039207855177739' //production
-//let countingChannelID = '1052681467706212502' //testing
+let config;
+try {
+  const fileContents = fs.readFileSync('../meuccidiscordbot/config.yml', 'utf8');
+  config = yaml.load(fileContents);
+} catch (e) {
+  console.error(e);
+  process.exit(1);
+}
 
-// take the last message from the counting channel as the counter start
+let countingChannelID = config.counting.channelID
+
 let count
 client.on('ready', () => {
 	const channel = client.channels.cache.get(countingChannelID)
@@ -25,7 +34,8 @@ client.on('messageCreate',async (message) => {
 			await message.delete()
 		else {
 			count++
-			message.react('✅')
+			if(config.counting.enableReaction === true)
+				message.react('✅')
 		}
 	}
 })

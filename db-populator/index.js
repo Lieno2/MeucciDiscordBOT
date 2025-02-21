@@ -3,11 +3,21 @@ const chrome = require('selenium-webdriver/chrome')
 const fs = require('fs')
 const path = require('path')
 const sqlite = require('better-sqlite3')
-const settings = require('./settings.json')
+const yaml = require('js-yaml');
+
+let config;
+try {
+  const fileContents = fs.readFileSync('../meuccidiscordbot/config.yml', 'utf8');
+  config = yaml.load(fileContents);
+} catch (e) {
+  console.error(e);
+  process.exit(1);
+}
 
 ;(async () => {
-	if (!settings) {
-		console.log('Please populate the settings.json file')
+	let value = config.dbp.scheduleLink
+	if (!value === undefined || value === null || value === "") {
+		console.log('Please fill the config.yml file')
 		return
 	}
 
@@ -26,7 +36,7 @@ const settings = require('./settings.json')
 
 	// Go to the 'schedule' page and scrape the sections
 
-	driver.get(settings.scheduleLink)
+	driver.get(config.dbp.scheduleLink)
 	let columns = await driver.findElements({ tagName: 'p' })
 	let sections = (await columns[2].getText()).replaceAll('^', '').split('\n')
 
